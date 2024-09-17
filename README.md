@@ -12,9 +12,9 @@
     <h5 align = left> - Licencia </h5>
 
   <h2 align = left> Insignias </h2>
-    <h5><b>Licencia: </b> Pendiente de licencia. </h5> 
-    <h5><b>Versión: </b> 2.4 </h5>
-    <h5><b>Última versión: </b> </h5>
+    <h5> Licencia: Pendiente de licencia. </h5> 
+    <h5> Versión: 2.4 </h5>
+    <h5> Última fecha de versión: 17/09/2024 </h5>
   <h2 align = left> Descripción del Proyecto </h2>
  
   <h2 align = left> Estado del proyecto </h2>
