@@ -1,6 +1,5 @@
 #ATRIBUTOS DE OTRAS CLASES
-from self import self
-from Monstruo import defensa
+from Monstruo import *
 
 
 

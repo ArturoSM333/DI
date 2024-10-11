@@ -7,6 +7,7 @@
     <list default="true" id="049d6d14-e214-417b-87a6-a97893efdf5c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Heroe.py" beforeDir="false" afterPath="$PROJECT_DIR$/Heroe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Monstruo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Monstruo.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +38,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Python.Heroe.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
     &quot;Python.calculadora.executor&quot;: &quot;Run&quot;,
     &quot;Python.operaciones.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
