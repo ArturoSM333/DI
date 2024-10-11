@@ -38,7 +38,7 @@ class Tesoro:
     # Este método según el número elegido al azar anteriormente elige uno de los 3 posibles beneficios.
 
 
-    def tipo_de_beneficio(numero_aleatorio):
+    def tipo_de_beneficio(self, numero_aleatorio):
         switch = {
             1: 'Aumento de ataque',
             2: 'Aumento de defensa',

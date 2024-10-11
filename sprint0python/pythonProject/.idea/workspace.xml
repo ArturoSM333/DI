@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="049d6d14-e214-417b-87a6-a97893efdf5c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Heroe.py" beforeDir="false" afterPath="$PROJECT_DIR$/Heroe.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Mazmorra.py" beforeDir="false" afterPath="$PROJECT_DIR$/Mazmorra.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Monstruo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Monstruo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tesoro.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tesoro.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,16 +38,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Heroe.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.calculadora.executor&quot;: &quot;Run&quot;,
-    &quot;Python.operaciones.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Heroe.executor": "Run",
+    "Python.Main.executor": "Run",
+    "Python.Mazmorra.executor": "Run",
+    "Python.calculadora.executor": "Run",
+    "Python.operaciones.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
