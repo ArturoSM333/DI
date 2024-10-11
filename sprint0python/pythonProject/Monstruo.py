@@ -4,6 +4,9 @@ from Heroe import *
 
 class Monstruo:
     def __init__(self, nombre, ataque, defensa, salud):
+
+    #ATRIBUTOS
+
         self.nombre = "Voldemort"
         self.ataque = 30
         self.defensa = 20
