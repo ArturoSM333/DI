@@ -10,11 +10,13 @@ class Heroe:
 
         #ATRIBUTOS
 
-            self.ataque = 14
-            self.defensa = 10
-            salud = 70
-            salud_maxima = 100
-            nombre = "Introducido por el jugador"
+            print("Introduzca el nombre del héroe: ")
+            nombre = input()
+            self.nombre = nombre
+            self.ataque = 31
+            self.defensa = 12
+            self.salud = 70
+            self.salud_maxima = 100
 
 
         #-------------------------------------MÉTODOS----------------------------------------
