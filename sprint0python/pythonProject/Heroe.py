@@ -9,8 +9,6 @@ class Heroe:
 
         #ATRIBUTOS
 
-            print("Introduzca el nombre del héroe: ")
-            nombre = input()
             self.nombre = nombre
             self.ataque = 31
             self.defensa = 12
