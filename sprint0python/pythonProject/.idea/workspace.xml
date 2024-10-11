@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="049d6d14-e214-417b-87a6-a97893efdf5c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Heroe.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Mazmorra.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Monstruo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Tesoro.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/calculadora.py" beforeDir="false" afterPath="$PROJECT_DIR$/calculadora.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,16 +26,20 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2nBs3T8r4bHUowVkngeUkxJsgtA" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.Heroe.executor": "Run",
     "Python.calculadora.executor": "Run",
     "Python.operaciones.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
