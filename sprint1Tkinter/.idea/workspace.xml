@@ -1,46 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="049d6d14-e214-417b-87a6-a97893efdf5c" name="Changes" comment="" />
+    <list default="true" id="c755fcf5-dee4-443d-8803-ddf378251a97" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../sprint0python/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../sprint0python/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sprint0python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../sprint0python/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sprint0python/pythonProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../sprint0python/pythonProject/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
-}</component>
-  <component name="ProjectId" id="2nBs3T8r4bHUowVkngeUkxJsgtA" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="2nQMrVxwaGyYRvK3d6c3rmltPEp" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.Heroe.executor": "Run",
-    "Python.Main.executor": "Run",
-    "Python.Mazmorra.executor": "Run",
-    "Python.calculadora.executor": "Run",
-    "Python.operaciones.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/artur/OneDrive/Escritorio/2oDAM/DI/sprint1python"
+    "last_opened_file_path": "C:/Users/artur/OneDrive/Escritorio/2oDAM/DI/sprint1Tkinter"
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -53,11 +40,11 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="049d6d14-e214-417b-87a6-a97893efdf5c" name="Changes" comment="" />
-      <created>1728457603448</created>
+      <changelist id="c755fcf5-dee4-443d-8803-ddf378251a97" name="Changes" comment="" />
+      <created>1728901045847</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1728457603448</updated>
+      <updated>1728901045847</updated>
     </task>
     <servers />
   </component>
