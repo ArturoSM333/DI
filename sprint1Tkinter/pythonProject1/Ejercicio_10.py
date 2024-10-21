@@ -10,8 +10,8 @@ import tkinter as tk
 # Creamos la ventana principal
 
 root = tk.Tk()
-root.title = "Scrollbar"
-root.geometry = ("100x100")
+root.title("Scrollbar")
+root.geometry("300x300")
 
 
 # Creamos el frame para el text y la scrollbar
