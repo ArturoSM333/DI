@@ -123,7 +123,7 @@ class ControladorNotas:
             self.vista.etiqueta_imagen.config(text="Error al descargar la imagen.")
 
     def iniciar_descarga(self):
-        url = ''
+        url = 'https://raw.githubusercontent.com/ArturoSM333/DI/refs/heads/main/sprint2Tkinter/pythonProject/Txt_e_imagen/vini.jpeg'
         hilo = threading.Thread(target=self.descargar_imagen, args=(url, self.actualizar_etiqueta))
         hilo.start()
 
