@@ -10,8 +10,7 @@ Método guardar_notas(): Guarda las notas en un archivo de texto (notas.txt).
 Método cargar_notas(): Carga las notas desde el archivo de texto (notas.txt) al iniciar la aplicación.
 
 '''
-# Importes
-import tkinter as tk
+from importlib.util import source_hash
 
 '''
 1. Modelo: NotasModel
@@ -33,21 +32,26 @@ cargar_notas(): Abre el archivo notas.txt en modo lectura ('r') y lee cada líne
 class NotasModel:
 
     def __init__(self):
-        self.notas = notas
-
+        self.notas = []
 
     def agregar_nota(self, nueva_nota):
+        self.notas.append(nueva_nota)
 
-
-
-    def eliminar_nota(self):
-
+    def eliminar_nota(self, indice):
+        self.notas.pop(indice)
 
     def obtener_notas(self):
-
+        return self.notas
 
     def guardar_notas(self):
-
+        with open("Txt_e_imagen/nota.txt", "w") as archivo:
+            for nota in self.notas:
+                archivo.write(nota + "\n")
 
     def cargar_notas(self):
-
+        notas_txt = []
+        with open("Txt_e_imagen/nota.txt", "r") as archivo:
+            for linea in archivo:
+                notas_txt.append(
+                    linea.strip())  # Elimina espacios y saltos de línea
+        return notas_txt
