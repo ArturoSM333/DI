@@ -1,6 +1,6 @@
 
 import tkinter as tk
-
+from tkinter import simpledialog
 
 
 class MainMenu:
@@ -10,7 +10,7 @@ class MainMenu:
     def __init__(self, root):
         self.root = root
         self.root.title("Sprint 3 Tkinter")
-        self.root.geometry("600x600")
+        self.root.geometry("200x200")
 
         # Creareamos ahora los botones del menú principal
 
@@ -22,3 +22,12 @@ class MainMenu:
 
         self.opcion_salir = tk.Button(self.root, text="Salir")
         self.opcion_salir.pack(pady=5)
+
+    def ask_player_name(self):
+        # Mostrar un cuadro de diálogo para pedir el nombre del jugador
+        player_name = simpledialog.askstring(
+            "Nombre del Jugador",
+            "Introduce tu nombre:",
+            parent=self.root
+        )
+        return player_name
