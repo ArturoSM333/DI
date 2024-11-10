@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
+from tkinter import Toplevel, Label
+
+from modelo import GameModel
 
 
 class GameController:
@@ -7,6 +10,7 @@ class GameController:
 
     def __init__(self, vista):
         self.vista = vista
+        self.model = None
 
         self.vista.opcion_jugar.config(command=self.start_game_callback)
         self.vista.opcion_estadisticas.config(command=self.show_stats_callback)
@@ -14,6 +18,12 @@ class GameController:
 
     def start_game_callback(self):
         self.show_difficulty_selection()
+        self.model = GameModel(self.difficulty)
+        self.model._generate_board()  # Generar el tablero
+    #    self.show_loading_window()
+    # Juego provisional (sin imágenes)
+        self.create_game_board()
+
 
     def show_difficulty_selection(self):
         # Bucle para asegurarse de que la dificultad es válida
@@ -46,4 +56,30 @@ class GameController:
 
     def quit_callback(self):
         self.vista.root.quit()
+
+    def create_game_board(self):
+        print("Tablero creado con dificultad:", self.difficulty)
+        print("Tablero:", self.model.board)
+
+    '''
+    def show_loading_window(self):
+        # Crear una ventana de carga
+        loading_window = Toplevel(self.vista.root)
+        loading_window.title("Cargando Imágenes")
+        Label(loading_window, text="Cargando imágenes, por favor espera...").pack()
+
+        # Iniciar la carga de imágenes en un hilo
+        self.model.load_images_thread()
+
+
+        # Verificar periódicamente si las imágenes se han cargado
+        def check_images_loaded():
+            if self.model.images_loaded.is_set():
+                loading_window.destroy()
+                self.create_game_board()  # Llamar a la función para crear el tablero
+            else:
+                self.vista.root.after(100, check_images_loaded)
+
+        check_images_loaded()
+'''
 
