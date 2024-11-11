@@ -58,8 +58,7 @@ class GameController:
     def create_game_board(self):
         print("Tablero creado con dificultad:", self.difficulty)
     #    print("Tablero:", self.modelo.board)
-
-
+        
         if self.board_frame:
             self.board_frame.destroy()
 

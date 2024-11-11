@@ -31,3 +31,4 @@ class MainMenu:
             parent=self.root
         )
         return player_name
+

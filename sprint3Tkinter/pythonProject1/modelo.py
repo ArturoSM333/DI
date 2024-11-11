@@ -33,10 +33,8 @@ class GameModel:
 
     def load_images(self):
         url_base = "https://raw.githubusercontent.com/ArturoSM333/DI/refs/heads/main/sprint3Tkinter/pythonProject1/Img/"
-        print(url_base + "hidden.jpg")
         def load_images_thread():
 
-            print(url_base + "hidden.jpg")
             # Descargar la imagen oculta
             self.hidden_image = descargar_imagen(url_base + "hidden.jpg", (100, 100))
 
