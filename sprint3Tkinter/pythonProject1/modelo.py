@@ -1,20 +1,19 @@
 import threading
 import random
-from PIL import Image, ImageTk
-import requests
-from io import BytesIO
 from threading import Event
+from recursos import descargar_imagen
+
 
 class GameModel:
     def __init__(self, difficulty):
         self.difficulty = difficulty
         self.board = []
-    #    self.hidden_image = None
-    #    self.images = {}
-    #    self.images_loaded = Event()  # Usamos un Event para indicar cuando las imágenes están listas
-        self._generate_board()
+        self.hidden_image = None
+        self.images = {}
+        self.images_loaded = Event()  # Usamos un Event para indicar cuando las imágenes están listas
+        self.generate_board()
 
-    def _generate_board(self):
+    def generate_board(self):
         if self.difficulty == "facil":
             num_pares = 4
         elif self.difficulty == "medio":
@@ -28,29 +27,29 @@ class GameModel:
         self.board = [cartas[i:i + 4] for i in range(0, len(cartas), 4)]  # Dividir en filas de 4 cartas
 
 
-'''
-    def _load_images(self):
-        url_base = "https://github.com/ArturoSM333/DI/tree/main/sprint3Tkinter/pythonProject1/Img/" 
 
+
+
+
+    def load_images(self):
+        url_base = "https://raw.githubusercontent.com/ArturoSM333/DI/refs/heads/main/sprint3Tkinter/pythonProject1/Img/"
+        print(url_base + "hidden.jpg")
         def load_images_thread():
-            # Descargar la imagen oculta
-            self.hidden_image = descargar_imagen(url_base + "hidden.png")
 
-            # Obtener los identificadores de imágenes únicos
-            unique_image_ids = []
-            for row in self.board:
-                for image_id in row:
-                    if image_id not in unique_image_ids:
-                        unique_image_ids.append(image_id)
+            print(url_base + "hidden.jpg")
+            # Descargar la imagen oculta
+            self.hidden_image = descargar_imagen(url_base + "hidden.jpg", (100, 100))
+
+            # Identificadores de imágenes únicos
+            unique_image_ids = ["as_bastos.jpg", "as_copasjpg.jpg", "as_corazones.jpg", "as_diamantes.webp", "as_espadas.jpg", "as_oros.jpg", "as_trebol.jpg"]
 
             # Descargar cada imagen única
             for image_id in unique_image_ids:
-                image_url = f"{url_base}{image_id}.png"
-                self.images[image_id] = descargar_imagen(image_url)
+                image_url = url_base + image_id
+                self.images[image_id] = descargar_imagen(image_url, (100, 100))
 
             # Marcar que las imágenes se han cargado
             self.images_loaded.set()
 
         # Iniciar el hilo para cargar las imágenes
         threading.Thread(target=load_images_thread, daemon=True).start()
-'''
