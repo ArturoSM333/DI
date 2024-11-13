@@ -20,7 +20,7 @@ class GameModel:
         self._load_images()
 
     def _generate_board(self):
-        num_pairs = {"fácil": 8, "medio": 18, "difícil": 32}[self.difficulty]
+        num_pairs = {"facil": 8, "medio": 18, "dificil": 32}[self.difficulty]
         ids = list(range(num_pairs)) * 2
         random.shuffle(ids)
         return [ids[i:i + int(len(ids) ** 0.5)] for i in range(0, len(ids), int(len(ids) ** 0.5))]
@@ -62,7 +62,7 @@ class GameModel:
             print(f"Error al guardar la puntuación: {e}")
 
     def load_scores(self):
-        scores = {"fácil": [], "medio": [], "difícil": []}
+        scores = {"facil": [], "medio": [], "dificil": []}
         try:
             with open("ranking.txt", "r") as file:
                 for line in file:

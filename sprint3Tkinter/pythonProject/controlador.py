@@ -14,8 +14,8 @@ class GameController:
         self.menu = MainMenu(root, self.show_difficulty_selection, self.show_stats, root.quit)
 
     def show_difficulty_selection(self):
-        difficulty = simpledialog.askstring("Dificultad", "Elige una dificultad: fácil, medio, difícil")
-        if difficulty in ["fácil", "medio", "difícil"]:
+        difficulty = simpledialog.askstring("Dificultad", "Elige una dificultad: facil, medio, dificil")
+        if difficulty in ["facil", "medio", "dificil"]:
             player_name = self.menu.ask_player_name()
             if player_name:
                 self.start_game(difficulty)
