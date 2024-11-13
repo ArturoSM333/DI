@@ -23,6 +23,7 @@ class GameController:
         self.game_closed=False
 
     def start_game_callback(self):
+        self.npares=0
         self.game_closed = True
         self.show_difficulty_selection()
         self.modelo = GameModel(self.difficulty)
@@ -82,6 +83,11 @@ class GameController:
         self.vista.move_label.config(text=f"Movimientos: {self.moves}")
 
     def create_game_board(self):
+        if not self.modelo.images_loaded.is_set():
+            # Si las imágenes no están cargadas, no creamos el tablero.
+            self.root.after(100, self.create_game_board)
+            return
+
         print("Tablero creado con dificultad:", self.difficulty)
     #    print("Tablero:", self.modelo.board)
 
@@ -92,36 +98,76 @@ class GameController:
         self.board_frame.pack()
 
         # Crear los botones para las cartas del tablero
-        for row in self.modelo.board:
+        self.buttons = {}
+        for row_index, row in enumerate(self.modelo.board):
             row_frame = tk.Frame(self.board_frame)
             row_frame.pack(pady=5)
-            for card_id in row:
+            for col_index, card_id in enumerate(row):
                 image_name = card_id
                 # Intentar obtener la imagen desde el diccionario de imágenes
-                image = self.modelo.images.get(image_name, self.modelo.hidden_image)
-
+                image = self.modelo.hidden_image
                 # Crear un botón para cada carta
                 button = tk.Button(row_frame, image=image,
-                                   command=lambda card_id=card_id: self.on_card_click(card_id))
+                                   command=lambda row=row_index, col=col_index: self.on_card_click(row, col))
                 button.pack(side="left")
+
+                # Guardar el botón en el diccionario con las tuplas (row, col) como clave
+                self.buttons[(row_index, col_index)] = button
 
                 # Guardar la referencia de la imagen para evitar que se libere
                 button.image = image
 
 
-    def on_card_click(self, card_id):
+
+    def hide_cards(self):
+        # Oculta las cartas volviendo a la imagen oculta
+        for (row, col) in self.selected:
+            card_id = self.modelo.board[row][col]
+            self.buttons[(row, col)].config(image=self.modelo.hidden_image)
+        self.selected.clear()
+
+    def show_cards(self, card_id):
+        image_card = self.modelo.images[card_id]
+        self.buttons[card_id].config(image=image_card)
+
+    def handle_card_selection(self):
+        if len(self.selected) == 2:
+            (row1, col1), (row2, col2) = self.selected
+            card1_id = self.modelo.board[row1][col1]
+            card2_id = self.modelo.board[row2][col2]
+            # Si las dos cartas seleccionadas son iguales
+            if card1_id == card2_id:
+                self.npares += 1
+                if self.difficulty == "facil" and self.npares == 4:
+                    messagebox.showinfo("Enhorabuena!", "¡Has completado el nivel fácil!")
+                elif self.difficulty == "medio" and self.npares == 8:
+                    messagebox.showinfo("Enhorabuena!", "¡Has completado el nivel medio!")
+                elif self.difficulty == "dificil" and self.npares == 12:
+                    messagebox.showinfo("Enhorabuena!", "¡Has completado el nivel difícil!")
+                self.selected.clear()
+            else:
+                self.root.after(1000, self.hide_cards)
+
+    def update_board(self, row, col, image):
+        # Actualiza la imagen del botón correspondiente
+        self.buttons[(row, col)].config(image=image)
+
+    def on_card_click(self, row, col):
         # Lógica cuando se hace clic en una carta
-        print(f"Carta {card_id} clickeada")
-        self.update_move_count()
-        ''' self.modelo.start_timer()  # Iniciar el temporizador si es la primera carta seleccionada
+        card_id = self.modelo.board[row][col]  # Obtener el ID de la carta según su fila y columna
+        print(f"Carta {card_id} clickeada en la posición ({row}, {col})")
 
-       if len(self.selected) < 2:
-           self.selected.append(card_id)  # Guardamos la carta seleccionada
-           self.vista.update_board(self.selected)  # Actualizamos la vista para mostrar la carta
+        # Evitar seleccionar la misma carta dos veces
+        if len(self.selected) < 2:
+            self.selected.append((row, col))  # Almacenar la posición (fila, columna)
+            image = self.modelo.images.get(card_id)  # Obtener la imagen correspondiente
+            self.update_board(row, col, image)
 
-           if len(self.selected) == 2:
-               self.handle_card_selection()  # Compara las cartas seleccionadas
-'''
+            # Cuando se hayan seleccionado dos cartas, verificamos si son una pareja
+            if len(self.selected) == 2:
+                # Esperamos 2 segundos para permitir que el jugador vea las cartas antes de comprobar
+                self.root.after(2000, self.handle_card_selection)
+                self.update_move_count()
 
 
     def show_loading_window(self):
@@ -144,4 +190,8 @@ class GameController:
 
         check_images_loaded()
 
+'''    # Cargar la imagen con Pillow
+    imagen = Image.open("ruta/a/tu/imagen.jpg")  # Reemplaza con el path de tu imagen
 
+    # Convertir la imagen a un formato compatible con Tkinter
+    imagen_tk = ImageTk.PhotoImage(imagen)'''

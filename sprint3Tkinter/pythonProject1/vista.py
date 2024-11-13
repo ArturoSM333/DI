@@ -41,11 +41,5 @@ class MainMenu:
         )
         return player_name
 
-'''
-    def update_timer(self, time_elapsed):
-        """Actualiza la etiqueta del temporizador con el tiempo transcurrido"""
-        self.timer_label.config(text=f"Tiempo: {time_elapsed}")
-
-'''
 
 

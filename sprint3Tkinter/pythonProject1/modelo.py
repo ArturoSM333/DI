@@ -2,6 +2,10 @@ import datetime
 import threading
 import random
 from threading import Event
+
+from PIL import Image, ImageTk
+
+import recursos
 from recursos import descargar_imagen
 
 
@@ -37,12 +41,16 @@ class GameModel:
 
             # Descargar la imagen oculta
             self.hidden_image = descargar_imagen(url_base + "hidden.jpg", (100, 100))
-
-            # Descargar cada imagen única
-            for image_id in range(12):
-                image_url = url_base + "imagen_" + str(image_id) + ".jpg"
-                self.images[image_id] = descargar_imagen(image_url, (100, 100))
-
+            '''           # Descargar cada imagen única
+                       for image_id in range(12):
+                           image_url = url_base + "imagen_" + str(image_id) + ".jpg"
+                           self.images[image_id] = descargar_imagen(image_url, (100, 100))'''
+            # Carga imágenes para cada identificador de carta en el tablero
+            unique_ids = set(id for row in self.board for id in row)  # Identificadores únicos de cartas
+            for image_id in unique_ids:
+                image_url = f"{url_base}imagen_{image_id-1}.jpg"
+                self.images[image_id] = recursos.descargar_imagen(image_url, (100, 100))
+            print(self.board)
             # Marcar que las imágenes se han cargado
             self.images_loaded.set()
 
