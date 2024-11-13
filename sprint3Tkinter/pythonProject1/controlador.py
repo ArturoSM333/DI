@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 from tkinter import Toplevel, Label
@@ -23,12 +24,16 @@ class GameController:
         self.game_closed=False
 
     def start_game_callback(self):
+        self.game_finished = True
+        self.moves=0
+        self.vista.move_label.config(text=f"Movimientos: {self.moves}")
         self.npares=0
         self.game_closed = True
         self.show_difficulty_selection()
         self.modelo = GameModel(self.difficulty)
         self.modelo.generate_board()  # Generar el tablero
         self.show_loading_window()
+        self.game_finished = False
         self.start_timer()
 
     def show_difficulty_selection(self):
@@ -58,7 +63,44 @@ class GameController:
         print(f"Nombre del jugador: {self.player_name}")
 
     def show_stats_callback(self):
-        print("Estadísticas")
+        scores = self.load_scores()
+        print(f"Mostrando estadísticas: {scores}")  # Imprimir las puntuaciones cargadas
+
+        # Crear una nueva ventana para mostrar las estadísticas
+        stats_window = Toplevel(self.vista.root)
+        stats_window.title("Estadísticas")
+
+        stats_label = tk.Label(stats_window, text="Mejores puntuaciones:", font=("Arial", 14))
+        stats_label.pack(pady=10)
+
+        for difficulty, entries in scores.items():
+            stats_label = tk.Label(stats_window, text=f"Dificultad: {difficulty.capitalize()}", font=("Arial", 12))
+            stats_label.pack(pady=5)
+            for entry in entries:
+                name, moves, time = entry
+                stat_text = f"{name} - {moves} movimientos, {time} segundos"
+                stat_label = tk.Label(stats_window, text=stat_text, font=("Arial", 10))
+                stat_label.pack(pady=2)
+
+        # Botón para cerrar la ventana de estadísticas
+        close_button = tk.Button(stats_window, text="Cerrar", command=stats_window.destroy)
+        close_button.pack(pady=10)
+
+    def load_scores(self):
+        scores = {"facil": [], "medio": [], "dificil": []}
+        try:
+            with open("Txt/Ranking.txt", "r") as file:
+                for line in file:
+                    name, difficulty, moves, time = line.strip().split(",")
+                    if difficulty in scores:
+                        scores[difficulty].append((name, int(moves), int(time)))
+            # Ordenar por movimientos y tiempo
+            for difficulty in scores:
+                scores[difficulty] = sorted(scores[difficulty], key=lambda x: (x[1], x[2]))[:3]
+            print(f"Estadísticas cargadas: {scores}")
+        except Exception as e:
+            print(f"Error al cargar las puntuaciones: {e}")
+        return scores
 
     def quit_callback(self):
         print("Saliendo...")
@@ -67,13 +109,14 @@ class GameController:
 
     def start_timer(self):
         self.time=0
+        self.game_finished = False  # Reiniciar el estado del juego
         self.update_time()
 
 
     def update_time(self):
-        self.vista.timer_label.config(text=f"Tiempo: {self.time} s")
-        self.time+=1
         if not self.game_finished or not self.game_closed:
+            self.vista.timer_label.config(text=f"Tiempo: {self.time} s")
+            self.time+=1
             self.root.after(1000, self.update_time)
 
 
@@ -89,35 +132,37 @@ class GameController:
             return
 
         print("Tablero creado con dificultad:", self.difficulty)
-    #    print("Tablero:", self.modelo.board)
 
         if self.board_frame:
             self.board_frame.destroy()
 
         self.board_frame = tk.Frame(self.vista.root)
-        self.board_frame.pack()
+        self.board_frame.pack(fill=tk.BOTH, expand=True)
 
-        # Crear los botones para las cartas del tablero
+        # Determinar el número de filas y columnas según la dificultad
+        if self.difficulty == "facil":
+            rows, cols = 2, 4  # 2 filas, 4 columnas (8 cartas)
+        elif self.difficulty == "medio":
+            rows, cols = 4, 4  # 4 filas, 4 columnas (16 cartas)
+        elif self.difficulty == "dificil":
+            rows, cols = 4, 6  # 4 filas, 6 columnas (24 cartas)
+
+        # Ajustar el tamaño de los botones según la pantalla
         self.buttons = {}
-        for row_index, row in enumerate(self.modelo.board):
+        for row_index in range(rows):
             row_frame = tk.Frame(self.board_frame)
-            row_frame.pack(pady=5)
-            for col_index, card_id in enumerate(row):
-                image_name = card_id
-                # Intentar obtener la imagen desde el diccionario de imágenes
+            row_frame.pack(fill=tk.X)  # Asegura que cada fila se ajusta al ancho de la ventana
+            for col_index in range(cols):
+                image_name = f"card_{row_index}_{col_index}"  # Ejemplo de nombre de carta
                 image = self.modelo.hidden_image
-                # Crear un botón para cada carta
+
+                # Crear un botón ajustable según el tamaño de la ventana
                 button = tk.Button(row_frame, image=image,
                                    command=lambda row=row_index, col=col_index: self.on_card_click(row, col))
-                button.pack(side="left")
+                button.pack(side="left", padx=5, pady=5)
 
-                # Guardar el botón en el diccionario con las tuplas (row, col) como clave
                 self.buttons[(row_index, col_index)] = button
-
-                # Guardar la referencia de la imagen para evitar que se libere
                 button.image = image
-
-
 
     def hide_cards(self):
         # Oculta las cartas volviendo a la imagen oculta
@@ -140,13 +185,16 @@ class GameController:
                 self.npares += 1
                 if self.difficulty == "facil" and self.npares == 4:
                     messagebox.showinfo("Enhorabuena!", "¡Has completado el nivel fácil!")
+                    self.game_over()
                 elif self.difficulty == "medio" and self.npares == 8:
                     messagebox.showinfo("Enhorabuena!", "¡Has completado el nivel medio!")
+                    self.game_over()
                 elif self.difficulty == "dificil" and self.npares == 12:
                     messagebox.showinfo("Enhorabuena!", "¡Has completado el nivel difícil!")
+                    self.game_over()
                 self.selected.clear()
             else:
-                self.root.after(1000, self.hide_cards)
+                self.root.after(500, self.hide_cards)
 
     def update_board(self, row, col, image):
         # Actualiza la imagen del botón correspondiente
@@ -166,7 +214,7 @@ class GameController:
             # Cuando se hayan seleccionado dos cartas, verificamos si son una pareja
             if len(self.selected) == 2:
                 # Esperamos 2 segundos para permitir que el jugador vea las cartas antes de comprobar
-                self.root.after(2000, self.handle_card_selection)
+                self.root.after(1000, self.handle_card_selection)
                 self.update_move_count()
 
 
@@ -190,8 +238,24 @@ class GameController:
 
         check_images_loaded()
 
-'''    # Cargar la imagen con Pillow
-    imagen = Image.open("ruta/a/tu/imagen.jpg")  # Reemplaza con el path de tu imagen
+    def game_over(self):
+        # El juego ha terminado
+        self.game_finished = True
+        self.save_score()  # Guardar la puntuación del jugador
+        messagebox.showinfo("¡Felicidades!",
+                            f"Has completado el juego en {self.moves} movimientos y {self.time} segundos.")
+        self.show_stats_callback()  # Mostrar estadísticas al finalizar
 
-    # Convertir la imagen a un formato compatible con Tkinter
-    imagen_tk = ImageTk.PhotoImage(imagen)'''
+    def save_score(self):
+        try:
+            if not os.path.exists("Txt"):
+                os.makedirs("Txt")
+
+            with open("Txt/Ranking.txt", "a") as file:
+                # Guardar la puntuación
+                file.write(f"{self.player_name},{self.difficulty},{self.moves},{self.time}\n")
+            print("Puntuación guardada correctamente.")
+        except Exception as e:
+            print(f"Error al guardar la puntuación: {e}")
+
+

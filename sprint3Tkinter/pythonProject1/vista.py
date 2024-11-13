@@ -10,7 +10,7 @@ class MainMenu:
     def __init__(self, root):
         self.root = root
         self.root.title("Sprint 3 Tkinter")
-        self.root.geometry("200x200")
+        self.root.geometry("700x700")
 
         # Creareamos ahora los botones del menú principal
 

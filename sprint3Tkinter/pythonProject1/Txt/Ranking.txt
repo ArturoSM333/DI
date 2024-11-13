@@ -1,0 +1,7 @@
+arturo,facil,9,32
+arturo,facil,8,25
+aa,facil,6,22
+aa,facil,6,25
+aaa,facil,6,31
+arturo,facil,4,15
+Arturo,dificil,12,39
