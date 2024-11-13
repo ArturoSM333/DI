@@ -1,13 +1,19 @@
 import threading
+import time
 import random
+import datetime
 from threading import Event
 from recursos import descargar_imagen
 
 
 class GameModel:
-    def __init__(self, difficulty):
+    def __init__(self, difficulty, player_name, cell_size =100):
         self.difficulty = difficulty
         self.board = []
+        self.timer_started = False  # Controla si el temporizador ya ha comenzado
+        self.time_elapsed = 0  # El tiempo transcurrido en segundos
+        self.start_time=0
+        self.moves= 0
         self.hidden_image = None
         self.images = {}
         self.images_loaded = Event()  # Usamos un Event para indicar cuando las imágenes están listas
@@ -28,9 +34,6 @@ class GameModel:
 
 
 
-
-
-
     def load_images(self):
         url_base = "https://raw.githubusercontent.com/ArturoSM333/DI/refs/heads/main/sprint3Tkinter/pythonProject1/Img/"
         def load_images_thread():
@@ -39,7 +42,7 @@ class GameModel:
             self.hidden_image = descargar_imagen(url_base + "hidden.jpg", (100, 100))
 
             # Identificadores de imágenes únicos
-            unique_image_ids = ["as_bastos.jpg", "as_copasjpg.jpg", "as_corazones.jpg", "as_diamantes.webp", "as_espadas.jpg", "as_oros.jpg", "as_trebol.jpg"]
+            unique_image_ids = ["as_bastos.jpg", "as_copas.jpg", "as_corazones.jpg", "as_diamantes.jpg", "as_espadas.jpg", "as_oros.jpg", "as_trebol.jpg"]
 
             # Descargar cada imagen única
             for image_id in unique_image_ids:
@@ -51,3 +54,25 @@ class GameModel:
 
         # Iniciar el hilo para cargar las imágenes
         threading.Thread(target=load_images_thread, daemon=True).start()
+
+    '''
+    def start_timer(self):
+        if not self.timer_started:
+            self.timer_started = True
+            self.time_elapsed = 0  # Reiniciar el tiempo
+            self.update_time()
+
+
+    def update_time(self):
+        self.time_elapsed += 1  # Incrementar el tiempo en 1 segundo
+        self.vista.update_timer(self.time_elapsed)  # Actualiza la vista con el tiempo
+
+        # Llamar nuevamente a update_time después de 1000ms (1 segundo)
+        self.vista.root.after(1000, self.update_time)  # Recurre cada 1 segundo
+
+
+    def stop_timer(self):
+        """Detener el temporizador cuando se complete el juego"""
+        self.timer_started = False
+        print(f"Juego completado. Tiempo total: {self.time_elapsed} segundos.")
+'''

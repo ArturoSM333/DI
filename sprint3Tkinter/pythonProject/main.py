@@ -1,0 +1,16 @@
+import tkinter as tk
+from controlador import GameController
+from modelo import GameModel
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Juego de Memoria")
+
+    # Inicialización del modelo con dificultad y nombre del jugador
+    modelo = GameModel(difficulty="fácil", player_name="Jugador")
+
+    # Inicialización del controlador
+    controller = GameController(root)
+
+    # Inicio del bucle principal de la interfaz
+    root.mainloop()

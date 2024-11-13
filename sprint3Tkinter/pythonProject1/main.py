@@ -1,6 +1,4 @@
 import tkinter as tk
-
-
 from vista import MainMenu
 from controlador import GameController
 

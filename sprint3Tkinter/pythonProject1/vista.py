@@ -23,6 +23,10 @@ class MainMenu:
         self.opcion_salir = tk.Button(self.root, text="Salir")
         self.opcion_salir.pack(pady=5)
 
+
+        self.timer_label = tk.Label(self.root, text="Tiempo: 0")
+        self.timer_label.pack()
+
     def ask_player_name(self):
         # Mostrar un cuadro de diálogo para pedir el nombre del jugador
         player_name = simpledialog.askstring(
@@ -31,4 +35,12 @@ class MainMenu:
             parent=self.root
         )
         return player_name
+
+'''
+    def update_timer(self, time_elapsed):
+        """Actualiza la etiqueta del temporizador con el tiempo transcurrido"""
+        self.timer_label.config(text=f"Tiempo: {time_elapsed}")
+
+'''
+
 

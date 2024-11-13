@@ -11,7 +11,7 @@ class GameController:
         self.vista = vista
         self.modelo = None
         self.board_frame = None
-
+        self.selected = []
         self.vista.opcion_jugar.config(command=self.start_game_callback)
         self.vista.opcion_estadisticas.config(command=self.show_stats_callback)
         self.vista.opcion_salir.config(command=self.quit_callback)
@@ -21,7 +21,6 @@ class GameController:
         self.modelo = GameModel(self.difficulty)
         self.modelo.generate_board()  # Generar el tablero
         self.show_loading_window()
-
 
     def show_difficulty_selection(self):
         # Bucle para asegurarse de que la dificultad es válida
@@ -50,15 +49,16 @@ class GameController:
         print(f"Nombre del jugador: {self.player_name}")
 
     def show_stats_callback(self):
-        print("h")
+        print("Estadísticas")
 
     def quit_callback(self):
+        print("Saliendo...")
         self.vista.root.quit()
 
     def create_game_board(self):
         print("Tablero creado con dificultad:", self.difficulty)
     #    print("Tablero:", self.modelo.board)
-        
+
         if self.board_frame:
             self.board_frame.destroy()
 
@@ -70,21 +70,56 @@ class GameController:
             row_frame = tk.Frame(self.board_frame)
             row_frame.pack(pady=5)
             for card_id in row:
-                image_name = f"as_{card_id}.jpg"  # Formato de imagen que deberías tener
+                image_name = card_id
                 # Intentar obtener la imagen desde el diccionario de imágenes
                 image = self.modelo.images.get(image_name, self.modelo.hidden_image)
 
                 # Crear un botón para cada carta
                 button = tk.Button(row_frame, image=image,
-                                   command=lambda card_id=card_id: self.card_click_callback(card_id))
+                                   command=lambda card_id=card_id: self.on_card_click(card_id))
                 button.pack(side="left")
 
                 # Guardar la referencia de la imagen para evitar que se libere
                 button.image = image
 
-    def card_click_callback(self, card_id):
+
+    def actualizar_etiqueta(self, imagen_tk):
+        if imagen_tk:
+            boton_imagen=
+            self.vista.boton_imagen.config(image=imagen_tk)
+            self.vista.boton_imagen.image = imagen_tk  # Mantiene referencia de la imagen
+        else:
+            self.vista.boton_imagen.config(text="Error al descargar la imagen.")
+
+    def clicked_card(self, card_id):
+        switch = {
+            1: self.actualizar_etiqueta(card_id),
+            2: 'e',
+            3: 'i',
+            4: 'o',
+            5: 'u'
+            6:
+            7:
+            8:
+        }
+        return switch.get(card_id, "Invalid input")
+
+
+    def on_card_click(self, card_id):
         # Lógica cuando se hace clic en una carta
         print(f"Carta {card_id} clickeada")
+        self.clicked_card(card_id)
+
+
+        ''' self.modelo.start_timer()  # Iniciar el temporizador si es la primera carta seleccionada
+
+       if len(self.selected) < 2:
+           self.selected.append(card_id)  # Guardamos la carta seleccionada
+           self.vista.update_board(self.selected)  # Actualizamos la vista para mostrar la carta
+
+           if len(self.selected) == 2:
+               self.handle_card_selection()  # Compara las cartas seleccionadas
+'''
 
 
     def show_loading_window(self):
