@@ -40,7 +40,7 @@ class GameModel:
 
             # Descargar cada imagen única
             for image_id in range(12):
-                image_url = url_base + image_id + ".jpg"
+                image_url = url_base + "imagen_" + str(image_id) + ".jpg"
                 self.images[image_id] = descargar_imagen(image_url, (100, 100))
 
             # Marcar que las imágenes se han cargado
