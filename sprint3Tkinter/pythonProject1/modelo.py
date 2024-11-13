@@ -1,19 +1,16 @@
-import threading
-import time
-import random
 import datetime
+import threading
+import random
 from threading import Event
 from recursos import descargar_imagen
 
 
 class GameModel:
-    def __init__(self, difficulty, player_name, cell_size =100):
+    def __init__(self, difficulty):
         self.difficulty = difficulty
         self.board = []
         self.timer_started = False  # Controla si el temporizador ya ha comenzado
         self.time_elapsed = 0  # El tiempo transcurrido en segundos
-        self.start_time=0
-        self.moves= 0
         self.hidden_image = None
         self.images = {}
         self.images_loaded = Event()  # Usamos un Event para indicar cuando las imágenes están listas
@@ -41,12 +38,9 @@ class GameModel:
             # Descargar la imagen oculta
             self.hidden_image = descargar_imagen(url_base + "hidden.jpg", (100, 100))
 
-            # Identificadores de imágenes únicos
-            unique_image_ids = ["as_bastos.jpg", "as_copas.jpg", "as_corazones.jpg", "as_diamantes.jpg", "as_espadas.jpg", "as_oros.jpg", "as_trebol.jpg"]
-
             # Descargar cada imagen única
-            for image_id in unique_image_ids:
-                image_url = url_base + image_id
+            for image_id in range(12):
+                image_url = url_base + image_id + ".jpg"
                 self.images[image_id] = descargar_imagen(image_url, (100, 100))
 
             # Marcar que las imágenes se han cargado
@@ -55,24 +49,25 @@ class GameModel:
         # Iniciar el hilo para cargar las imágenes
         threading.Thread(target=load_images_thread, daemon=True).start()
 
-    '''
-    def start_timer(self):
-        if not self.timer_started:
-            self.timer_started = True
-            self.time_elapsed = 0  # Reiniciar el tiempo
-            self.update_time()
 
+    def save_score(self):
+        try:
+            with open("ranking.txt", "a") as file:
+                file.write(f"{self.player_name},{self.difficulty},{self.moves},{datetime.now()}\n")
+        except Exception as e:
+            print(f"Error al guardar la puntuación: {e}")
 
-    def update_time(self):
-        self.time_elapsed += 1  # Incrementar el tiempo en 1 segundo
-        self.vista.update_timer(self.time_elapsed)  # Actualiza la vista con el tiempo
-
-        # Llamar nuevamente a update_time después de 1000ms (1 segundo)
-        self.vista.root.after(1000, self.update_time)  # Recurre cada 1 segundo
-
-
-    def stop_timer(self):
-        """Detener el temporizador cuando se complete el juego"""
-        self.timer_started = False
-        print(f"Juego completado. Tiempo total: {self.time_elapsed} segundos.")
-'''
+    def load_scores(self):
+        scores = {"facil": [], "medio": [], "dificil": []}
+        try:
+            with open("ranking.txt", "r") as file:
+                for line in file:
+                    name, difficulty, moves, date = line.strip().split(",")
+                    if difficulty in scores:
+                        scores[difficulty].append((name, int(moves), date))
+            for difficulty in scores:
+                scores[difficulty] = sorted(scores[difficulty], key=lambda x: x[1])[
+                                     :3]  # Solo las 3 mejores puntuaciones
+        except Exception as e:
+            print(f"Error al cargar las puntuaciones: {e}")
+        return scores

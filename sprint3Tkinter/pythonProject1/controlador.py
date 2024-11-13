@@ -2,12 +2,14 @@ import tkinter as tk
 from tkinter import simpledialog, messagebox
 from tkinter import Toplevel, Label
 from modelo import GameModel
+from vista import MainMenu
 
 
 class GameController:
 
 
-    def __init__(self, vista):
+    def __init__(self,root, vista):
+        self.root=root
         self.vista = vista
         self.modelo = None
         self.board_frame = None
@@ -15,12 +17,18 @@ class GameController:
         self.vista.opcion_jugar.config(command=self.start_game_callback)
         self.vista.opcion_estadisticas.config(command=self.show_stats_callback)
         self.vista.opcion_salir.config(command=self.quit_callback)
+        self.time = 0
+        self.moves =0
+        self.game_finished=False
+        self.game_closed=False
 
     def start_game_callback(self):
+        self.game_closed = True
         self.show_difficulty_selection()
         self.modelo = GameModel(self.difficulty)
         self.modelo.generate_board()  # Generar el tablero
         self.show_loading_window()
+        self.start_timer()
 
     def show_difficulty_selection(self):
         # Bucle para asegurarse de que la dificultad es válida
@@ -53,7 +61,25 @@ class GameController:
 
     def quit_callback(self):
         print("Saliendo...")
+        self.game_closed=True
         self.vista.root.quit()
+
+    def start_timer(self):
+        self.time=0
+        self.update_time()
+
+
+    def update_time(self):
+        self.vista.timer_label.config(text=f"Tiempo: {self.time} s")
+        self.time+=1
+        if not self.game_finished or not self.game_closed:
+            self.root.after(1000, self.update_time)
+
+
+
+    def update_move_count(self):
+        self.moves+=1
+        self.vista.move_label.config(text=f"Movimientos: {self.moves}")
 
     def create_game_board(self):
         print("Tablero creado con dificultad:", self.difficulty)
@@ -83,34 +109,10 @@ class GameController:
                 button.image = image
 
 
-    def actualizar_etiqueta(self, imagen_tk):
-        if imagen_tk:
-            boton_imagen=
-            self.vista.boton_imagen.config(image=imagen_tk)
-            self.vista.boton_imagen.image = imagen_tk  # Mantiene referencia de la imagen
-        else:
-            self.vista.boton_imagen.config(text="Error al descargar la imagen.")
-
-    def clicked_card(self, card_id):
-        switch = {
-            1: self.actualizar_etiqueta(card_id),
-            2: 'e',
-            3: 'i',
-            4: 'o',
-            5: 'u'
-            6:
-            7:
-            8:
-        }
-        return switch.get(card_id, "Invalid input")
-
-
     def on_card_click(self, card_id):
         # Lógica cuando se hace clic en una carta
         print(f"Carta {card_id} clickeada")
-        self.clicked_card(card_id)
-
-
+        self.update_move_count()
         ''' self.modelo.start_timer()  # Iniciar el temporizador si es la primera carta seleccionada
 
        if len(self.selected) < 2:

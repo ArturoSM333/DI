@@ -27,6 +27,11 @@ class MainMenu:
         self.timer_label = tk.Label(self.root, text="Tiempo: 0")
         self.timer_label.pack()
 
+        self.move_label = tk.Label(self.root, text="Movimientos: 0")
+        self.move_label.pack()
+
+
+
     def ask_player_name(self):
         # Mostrar un cuadro de diálogo para pedir el nombre del jugador
         player_name = simpledialog.askstring(

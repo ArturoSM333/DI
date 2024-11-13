@@ -3,18 +3,7 @@ from PIL import Image, ImageTk
 import io
 
 def descargar_imagen(url, size):
-    """
-    Descarga una imagen desde una URL, la redimensiona al tamaño especificado
-    y la convierte en un formato compatible con Tkinter.
 
-    Parámetros:
-    - url (str): La URL desde la cual se descargará la imagen.
-    - size (tuple): Un par (ancho, alto) que especifica el tamaño al cual se redimensionará la imagen.
-
-    Retorna:
-    - ImageTk.PhotoImage: Imagen redimensionada y convertida para Tkinter.
-    - None: Si ocurre un error durante la descarga o procesamiento de la imagen.
-    """
     try:
         # Realizar una solicitud GET para descargar la imagen
         response = requests.get(url)

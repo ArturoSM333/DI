@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
 
     vista=MainMenu(root)
-    controlador = GameController(vista)
+    controlador = GameController(root, vista)
 
     root.mainloop()
 
