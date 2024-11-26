@@ -1,0 +1,7 @@
+<resources>
+    <!-- Define el estilo circular -->
+    <style name="CircularImage" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>
