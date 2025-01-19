@@ -1,14 +1,10 @@
 package com.example.myvideogames;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.Toast;
-import com.google.firebase.auth.FirebaseAuth;
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -20,36 +16,29 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        findViewById(R.id.registerButton).setOnClickListener(v -> registerUser());
-        findViewById(R.id.loginButton).setOnClickListener(v -> loginUser());
+        // Verifica si el usuario ya está autenticado
+        if (mAuth.getCurrentUser() == null) {
+            // Si no hay un usuario autenticado, redirige a LoginActivity
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Finaliza MainActivity para que no quede en el stack
+        } else {
+            // Si hay un usuario autenticado, muestra un mensaje de bienvenida
+            String userEmail = mAuth.getCurrentUser().getEmail();
+            Toast.makeText(this, "Bienvenido: " + userEmail, Toast.LENGTH_SHORT).show();
+        }
+
+        // Botón para cerrar sesión
+        findViewById(R.id.logoutButton).setOnClickListener(v -> logoutUser());
     }
 
+    private void logoutUser() {
+        mAuth.signOut(); // Cierra la sesión del usuario actual
+        Toast.makeText(this, "Sesión cerrada.", Toast.LENGTH_SHORT).show();
 
-
-    private void loginUser() {
-        String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString();
-        String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Error en autenticación.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-    private void registerUser() {
-        String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString();
-        String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Usuario registrado correctamente.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Error en el registro: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        // Redirige al usuario a la pantalla de inicio de sesión
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish(); // Finaliza MainActivity para evitar que el usuario regrese
     }
 }
