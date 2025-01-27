@@ -5,72 +5,56 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myvideogames.R;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.myvideogames.viewmodels.RegisterViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    private RegisterViewModel registerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mAuth = FirebaseAuth.getInstance();
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
-        findViewById(R.id.registerButton).setOnClickListener(v -> registerUser());
+        EditText emailEditText = findViewById(R.id.emailEditText);
+        EditText passwordEditText = findViewById(R.id.passwordEditText);
+        EditText confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
+
+        findViewById(R.id.registerButton).setOnClickListener(v -> {
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
+            String confirmPassword = confirmPasswordEditText.getText().toString().trim();
+
+            registerViewModel.registerUser(email, password, confirmPassword);
+        });
+
         findViewById(R.id.loginRedirectButton).setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
         });
+
+        observeViewModel();
     }
 
-    private void registerUser() {
-        // Obtener los datos ingresados
-        String fullName = ((EditText) findViewById(R.id.fullNameEditText)).getText().toString().trim();
-        String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString().trim();
-        String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString().trim();
-        String confirmPassword = ((EditText) findViewById(R.id.confirmPasswordEditText)).getText().toString().trim();
-        String phone = ((EditText) findViewById(R.id.phoneEditText)).getText().toString().trim();
-        String address = ((EditText) findViewById(R.id.addressEditText)).getText().toString().trim();
+    private void observeViewModel() {
+        registerViewModel.getRegisterStatus().observe(this, status -> {
+            if (status != null) {
+                Toast.makeText(RegisterActivity.this, status, Toast.LENGTH_SHORT).show();
 
-        // Validar que los campos no estén vacíos
-        if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || phone.isEmpty() || address.isEmpty()) {
-            Toast.makeText(RegisterActivity.this, "Por favor, completa todos los campos.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+                if (status.equals("Usuario registrado correctamente.")) {
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
 
-        // Validar que las contraseñas coincidan
-        if (!password.equals(confirmPassword)) {
-            Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Validar formato del email
-        if (!email.contains("@")) {
-            Toast.makeText(RegisterActivity.this, "Por favor ingresa un correo electrónico válido.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Validar longitud de la contraseña
-        if (password.length() < 6) {
-            Toast.makeText(RegisterActivity.this, "La contraseña debe tener al menos 6 caracteres.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Registrar el usuario en Firebase
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Si el registro es exitoso, muestra un mensaje y redirige al Login
-                        Toast.makeText(RegisterActivity.this, "Usuario registrado correctamente.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    } else {
-                        // Si ocurre un error en el registro, muestra el mensaje del error
-                        Toast.makeText(RegisterActivity.this, "Error en el registro: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        registerViewModel.getIsLoading().observe(this, isLoading -> {
+            // Aquí podrías mostrar u ocultar un indicador de carga si lo tienes en la UI
+        });
     }
 }

@@ -2,45 +2,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Título del elemento -->
+    <!-- Título encima del RecyclerView -->
     <TextView
-        android:id="@+id/titleTextView"
+        android:id="@+id/titleRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Título del Elemento"
+        android:text="Videojuegos"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true" />
 
-    <!-- Descripción del elemento -->
-    <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Descripción del elemento"
-        android:layout_below="@id/titleTextView"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true" />
-
-    <!-- Imagen del elemento (se cargará mediante URL) -->
-    <ImageView
-        android:id="@+id/itemImageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_below="@id/descriptionTextView"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_launcher_background" />
-
-    <!-- Botón de Logout en la parte superior derecha -->
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"/>
+    <!-- RecyclerView debajo del título -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/titleRecyclerView"
+        android:layout_marginTop="16dp" /> <!-- Puedes ajustar este margen para dar más espacio entre el título y la lista -->
 
 </RelativeLayout>

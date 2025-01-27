@@ -1,97 +1,49 @@
 package com.example.myvideogames.views;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myvideogames.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;  // Biblioteca para cargar imágenes desde URL
+import com.example.myvideogames.adapters.GameAdapter;
+import com.example.myvideogames.models.Game;
+import com.example.myvideogames.viewmodels.DashboardViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-
-    private TextView titleTextView;
-    private TextView descriptionTextView;
-    private ImageView itemImageView;
-    private Button logoutButton;
+    private DashboardViewModel dashboardViewModel;
+    private RecyclerView recyclerView;
+    private GameAdapter gameAdapter;
+    private List<Game> gameList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        // Inicializar Firebase
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Vincular las vistas
-        titleTextView = findViewById(R.id.titleTextView);
-        descriptionTextView = findViewById(R.id.descriptionTextView);
-        itemImageView = findViewById(R.id.itemImageView);
-        logoutButton = findViewById(R.id.logoutButton);
+        gameAdapter = new GameAdapter(this, gameList);
+        recyclerView.setAdapter(gameAdapter);
 
-        // Obtener los datos de Firebase (este es un ejemplo con datos ficticios)
-        loadDashboardData();
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-        // Configurar el botón de Logout
-        logoutButton.setOnClickListener(v -> logout());
-    }
-
-    private void loadDashboardData() {
-        // Referencia al nodo "videojuegos/1" en la base de datos
-        DatabaseReference gameRef = mDatabase.child("videojuegos").child("1");
-
-        gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // Obtener los datos del nodo
-                    String itemTitle = dataSnapshot.child("titulo").getValue(String.class);
-                    String itemDescription = dataSnapshot.child("descripcion").getValue(String.class);
-                    String imageUrl = dataSnapshot.child("imagen").getValue(String.class);
-
-                    // Asignar los datos a las vistas
-                    titleTextView.setText(itemTitle);
-                    descriptionTextView.setText(itemDescription);
-
-                    // Cargar la imagen usando Picasso
-                    if (imageUrl != null && !imageUrl.isEmpty()) {
-                        Picasso.get().load(imageUrl).into(itemImageView);
-                    } else {
-                        Toast.makeText(DashboardActivity.this, "URL de imagen no válida.", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(DashboardActivity.this, "No se encontraron datos.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(DashboardActivity.this, "Error al cargar datos: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+        // Observar los datos de los juegos
+        dashboardViewModel.getGamesLiveData().observe(this, games -> {
+            if (games != null) {
+                gameList.clear();
+                gameList.addAll(games); // Agregar los juegos a la lista
+                gameAdapter.notifyDataSetChanged(); // Notificar al adaptador de que hay nuevos datos
             }
         });
-    }
 
-
-    private void logout() {
-        // Cerrar sesión
-        mAuth.signOut();
-        // Redirigir al LoginActivity
-        Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish(); // Cerrar DashboardActivity
+        // Cargar datos desde el repositorio
+        dashboardViewModel.loadGames();
     }
 }
