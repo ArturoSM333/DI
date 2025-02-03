@@ -34,14 +34,14 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_launcher_background" />
 
-    <!-- Botón de Logout en la parte superior derecha -->
     <Button
-        android:id="@+id/logoutButton"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="Volver al dashboard"
+        android:text="Back"/>
+
 
 </RelativeLayout>

@@ -13,11 +13,11 @@ import com.bumptech.glide.Glide;
 import com.example.myvideogames.R;
 import com.example.myvideogames.models.Game;
 import com.example.myvideogames.viewmodels.DetailViewModel;
-import com.google.firebase.auth.FirebaseAuth;
+
 
 public class DetailActivity extends AppCompatActivity {
     private DetailViewModel detailViewModel;
-    private FirebaseAuth mAuth;  // Declaramos FirebaseAuth para cerrar sesión
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,19 +25,25 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         detailViewModel = new ViewModelProvider(this).get(DetailViewModel.class);
-        mAuth = FirebaseAuth.getInstance(); // Inicializamos FirebaseAuth
 
         // UI elements
         ImageView imageView = findViewById(R.id.detailImageView);
         TextView titleTextView = findViewById(R.id.detailTitleTextView);
         TextView descriptionTextView = findViewById(R.id.detailDescriptionTextView);
-        Button logoutButton = findViewById(R.id.logoutButton); // Referencia al botón logout
+        Button backbutton = findViewById(R.id.backButton);
 
         // Obtener los datos del Intent
         Game game = (Game) getIntent().getSerializableExtra("GAME_DATA");
         if (game != null) {
             detailViewModel.setSelectedGame(game);
         }
+
+
+        findViewById(R.id.backButton).setOnClickListener(v -> {
+            Intent intent = new Intent(DetailActivity.this, DashboardActivity.class);
+            startActivity(intent);
+            finish(); // Opcional: para evitar que el usuario regrese a DetailActivity
+        });
 
         // Observar el ViewModel
         detailViewModel.getSelectedGame().observe(this, selectedGame -> {
@@ -52,13 +58,5 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        // Configuración del botón logout
-        logoutButton.setOnClickListener(v -> {
-            mAuth.signOut(); // Cerrar sesión
-            Intent intent = new Intent(DetailActivity.this, LoginActivity.class); // Redirigir al login
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Limpiar la pila de actividades
-            startActivity(intent);
-            finish(); // Finalizar DetailActivity
-        });
     }
 }
