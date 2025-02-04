@@ -16,4 +16,5 @@ public class DetailViewModel extends ViewModel {
     public void setSelectedGame(Game game) {
         selectedGame.setValue(game);
     }
+
 }
