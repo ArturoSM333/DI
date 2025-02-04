@@ -31,4 +31,11 @@
         android:layout_below="@id/titleRecyclerView"
         android:layout_marginTop="16dp" /> <!-- Puedes ajustar este margen para dar más espacio entre el título y la lista -->
 
+    <Button
+        android:id="@+id/favoritesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Ver Favoritos"/>
+
 </RelativeLayout>
