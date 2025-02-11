@@ -13,15 +13,9 @@
         android:theme="@style/Theme.MyVideogames"
         tools:targetApi="31">
 
-        <!-- MainActivity no debe tener LAUNCHER, sólo una actividad -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <!-- Si MainActivity no es la inicial, la eliminamos del filtro -->
-        </activity>
-
-        <!-- LoginActivity se convierte en la actividad inicial -->
-        <activity android:name=".views.LoginActivity"
+        <!-- SplashActivity se convierte en la actividad inicial -->
+        <activity android:name=".views.SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,13 +23,15 @@
             </intent-filter>
         </activity>
 
+        <!-- MainActivity ya no tiene LAUNCHER, se redirige a ella desde SplashActivity -->
+        <activity android:name=".views.MainActivity" android:exported="true" />
+
+        <!-- LoginActivity: no tiene LAUNCHER, se redirige a ella desde SplashActivity si el usuario no está autenticado -->
+        <activity android:name=".views.LoginActivity" android:exported="true" />
+
+        <!-- Otras actividades -->
         <activity android:name=".views.RegisterActivity" />
-        <activity android:name=".views.DashboardActivity" />
-        <activity android:name=".views.DetailActivity"/>
-        <activity android:name=".views.FavouritesActivity" />
         <activity android:name=".views.SettingsActivity" />
-
-
 
     </application>
 

@@ -37,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:contentDescription="Volver al dashboard"
         android:text="Back"/>
 
     <Button
