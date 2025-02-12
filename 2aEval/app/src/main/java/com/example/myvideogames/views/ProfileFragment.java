@@ -48,10 +48,11 @@ public class ProfileFragment extends Fragment {
 
             // Change theme based on the switch state
             if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
+            requireActivity().recreate();
         });
 
         // Cambiar la contraseña

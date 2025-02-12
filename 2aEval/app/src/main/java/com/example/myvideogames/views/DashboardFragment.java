@@ -27,54 +27,68 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflar el layout del fragmento
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        // Configurar el RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Obtener el ViewModel
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-        // Observar los juegos en el LiveData
         dashboardViewModel.getGamesLiveData().observe(getViewLifecycleOwner(), games -> {
-            GameAdapter adapter = new GameAdapter(getActivity(), games, new GameAdapter.FavoriteActionListener() {
-                @Override
-                public void onFavoriteAction(Game game) {
-                    // Aquí gestionas la acción de agregar a favoritos
-                    addToFavorites(game);
-                }
-            });
+            GameAdapter adapter = new GameAdapter(
+                    getActivity(),
+                    games,
+                    // Listener para favoritos
+                    new GameAdapter.FavoriteActionListener() {
+                        @Override
+                        public void onFavoriteAction(Game game) {
+                            addToFavorites(game);
+                        }
+                    },
+                    // Listener para click en el item
+                    new GameAdapter.OnGameClickListener() {
+                        @Override
+                        public void onGameClick(Game game) {
+                            openDetailFragment(game);
+                        }
+                    }
+            );
             recyclerView.setAdapter(adapter);
         });
 
-        // Cargar los juegos
         dashboardViewModel.loadGames();
 
         return view;
     }
 
-    // Método para agregar a favoritos
+    private void openDetailFragment(Game game) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("GAME_DATA", game);
+
+        DetailFragment detailFragment = new DetailFragment();
+        detailFragment.setArguments(bundle);
+
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, detailFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     private void addToFavorites(Game game) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            // Usar el título del juego como el ID único
             db.collection("favorites")
-                    .document(user.getUid()) // Usar el ID del usuario para separar los favoritos por usuario
+                    .document(user.getUid())
                     .collection("userFavorites")
-                    .document(game.getTitulo()) // Usar el título del juego como documento
+                    .document(game.getTitulo())
                     .set(game)
                     .addOnSuccessListener(aVoid -> {
-                        // Mostrar un mensaje o actualizar el UI
                         Toast.makeText(getContext(), "Game added to favorites", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> {
-                        // Manejar el error si no se puede agregar el juego
                         Toast.makeText(getContext(), "Error adding game to favorites", Toast.LENGTH_SHORT).show();
                     });
         }
     }
-
 }

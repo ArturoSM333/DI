@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,11 +19,15 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
     private Context context;
     private List<Game> gameList;
     private FavoriteActionListener favoriteActionListener;
+    private OnGameClickListener gameClickListener;
 
-    public GameAdapter(Context context, List<Game> gameList, FavoriteActionListener favoriteActionListener) {
+    public GameAdapter(Context context, List<Game> gameList,
+                       FavoriteActionListener favoriteActionListener,
+                       OnGameClickListener gameClickListener) {
         this.context = context;
         this.gameList = gameList;
         this.favoriteActionListener = favoriteActionListener;
+        this.gameClickListener = gameClickListener;
     }
 
     @Override
@@ -40,7 +45,15 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                 .load(game.getImagen())
                 .into(holder.imageView);
 
+        // Click para abrir DetailFragment
         holder.itemView.setOnClickListener(v -> {
+            if (gameClickListener != null) {
+                gameClickListener.onGameClick(game);
+            }
+        });
+
+        // Click para favoritos
+        holder.favoriteButton.setOnClickListener(v -> {
             if (favoriteActionListener != null) {
                 favoriteActionListener.onFavoriteAction(game);
             }
@@ -55,15 +68,21 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
     public static class GameViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView titleTextView;
+        ImageButton favoriteButton;
 
         public GameViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.gameImageView);
             titleTextView = itemView.findViewById(R.id.gameTitleTextView);
+            favoriteButton = itemView.findViewById(R.id.favoriteButton);
         }
     }
 
     public interface FavoriteActionListener {
         void onFavoriteAction(Game game);
+    }
+
+    public interface OnGameClickListener {
+        void onGameClick(Game game);
     }
 }

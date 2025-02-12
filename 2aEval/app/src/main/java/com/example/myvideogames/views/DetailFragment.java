@@ -4,50 +4,78 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import com.bumptech.glide.Glide;
 import com.example.myvideogames.R;
 import com.example.myvideogames.models.Game;
+import com.example.myvideogames.utils.FavoritesManager;
 
 public class DetailFragment extends Fragment {
-
-    private TextView titleTextView;
-    private TextView descriptionTextView;
-    private ImageView gameImageView;
-    private Game selectedGame;
+    private Game game;
+    private FavoritesManager favoritesManager;
+    private Button favoriteButton;
 
     public DetailFragment() {
-        // Required empty public constructor
+        // Constructor vacío requerido
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_detail, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        favoritesManager = new FavoritesManager(requireActivity().getApplication());
+
         if (getArguments() != null) {
-            selectedGame = (Game) getArguments().getSerializable("game");
+            game = (Game) getArguments().getSerializable("GAME_DATA");
         }
+
+        if (game == null) {
+            requireActivity().getSupportFragmentManager().popBackStack();
+            return;
+        }
+
+        TextView titleTextView = view.findViewById(R.id.detailTitleTextView);
+        TextView descriptionTextView = view.findViewById(R.id.detailDescriptionTextView);
+        ImageView imageView = view.findViewById(R.id.detailImageView);
+        favoriteButton = view.findViewById(R.id.favoriteButton);
+        Button backButton = view.findViewById(R.id.backButton);
+
+        titleTextView.setText(game.getTitulo());
+        descriptionTextView.setText(game.getDescripcion());
+
+        Glide.with(requireContext())
+                .load(game.getImagen())
+                .into(imageView);
+
+        updateFavoriteButton();
+
+        favoriteButton.setOnClickListener(v -> {
+            if (favoritesManager.isFavorite(game)) {
+                favoritesManager.removeFavorite(game);
+            } else {
+                favoritesManager.addFavorite(game);
+            }
+            updateFavoriteButton();
+        });
+
+        backButton.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
-        titleTextView = rootView.findViewById(R.id.detailTitleTextView);
-        descriptionTextView = rootView.findViewById(R.id.detailDescriptionTextView);
-        gameImageView = rootView.findViewById(R.id.detailImageView);
-
-        // Set data to views
-        if (selectedGame != null) {
-            titleTextView.setText(selectedGame.getTitulo());
-            descriptionTextView.setText(selectedGame.getDescripcion());
-            // Load image (using a library like Glide or Picasso for real app)
-            gameImageView.setImageResource(R.drawable.ic_launcher_background); // Placeholder
+    private void updateFavoriteButton() {
+        if (favoritesManager.isFavorite(game)) {
+            favoriteButton.setText("Eliminar de Favoritos");
+        } else {
+            favoriteButton.setText("Agregar a Favoritos");
         }
-
-        return rootView;
     }
 }
