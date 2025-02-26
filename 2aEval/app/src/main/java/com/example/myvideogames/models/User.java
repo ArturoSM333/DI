@@ -1,11 +1,13 @@
 package com.example.myvideogames.models;
 
+// Clase modelo que representa un usuario en la aplicación
 public class User {
-    private String fullName;
-    private String email;
-    private String phone;
-    private String address;
+    private String fullName; // Nombre completo del usuario
+    private String email; // Correo electrónico del usuario
+    private String phone; // Número de teléfono del usuario
+    private String address; // Dirección del usuario
 
+    // Constructor para inicializar los atributos del usuario
     public User(String fullName, String email, String phone, String address) {
         this.fullName = fullName;
         this.email = email;
@@ -13,7 +15,7 @@ public class User {
         this.address = address;
     }
 
-    // Getters and Setters
+    // Getters y Setters para acceder y modificar los atributos
     public String getFullName() {
         return fullName;
     }

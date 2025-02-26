@@ -3,19 +3,21 @@ package com.example.myvideogames.models;
 import java.io.Serializable;
 import java.util.Objects;
 
+// Clase modelo que representa un videojuego
 public class Game implements Serializable {
-    private String titulo;
-    private String descripcion;
-    private String imagen;
+    private String titulo; // Título del videojuego
+    private String descripcion; // Descripción del videojuego
+    private String imagen; // URL de la imagen del videojuego
 
+    // Constructor con parámetros para inicializar los atributos
     public Game(String titulo, String descripcion, String imagen) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.imagen = imagen;
     }
 
+    // Constructor vacío requerido por Firebase
     public Game() {
-        // Deja este constructor vacío, ya que es requerido por Firebase
     }
 
     // Getters y Setters
@@ -43,6 +45,7 @@ public class Game implements Serializable {
         this.imagen = imagen;
     }
 
+    // Método para comparar dos objetos Game basándose en sus atributos
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,6 +56,7 @@ public class Game implements Serializable {
                 Objects.equals(imagen, game.imagen);
     }
 
+    // Método para generar un código hash basado en los atributos
     @Override
     public int hashCode() {
         return Objects.hash(titulo, descripcion, imagen);

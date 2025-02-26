@@ -20,11 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileFragment extends Fragment {
 
-    private Switch themeSwitch;
-    private Button changePasswordButton;
+    private Switch themeSwitch;  // Switch para cambiar entre tema claro y oscuro
+    private Button changePasswordButton;  // Botón para cambiar la contraseña
 
     public ProfileFragment() {
-        // Required empty public constructor
+        // Constructor vacío requerido
     }
 
     @Override
@@ -32,30 +32,32 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        // Inicializar los componentes
         themeSwitch = rootView.findViewById(R.id.themeSwitch);
         changePasswordButton = rootView.findViewById(R.id.changePasswordButton);
 
-        // Set the switch state based on SharedPreferences (saved theme)
+        // Obtener la preferencia de tema guardada en SharedPreferences
         SharedPreferences prefs = getActivity().getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         boolean isDarkMode = prefs.getBoolean("isDarkMode", false);
-        themeSwitch.setChecked(isDarkMode);
+        themeSwitch.setChecked(isDarkMode);  // Establecer el estado del switch
 
+        // Listener para cambiar el estado del tema
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Save the theme preference
+            // Guardar la preferencia del tema
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("isDarkMode", isChecked);
             editor.apply();
 
-            // Change theme based on the switch state
+            // Cambiar el tema basado en el estado del switch
             if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);  // Modo oscuro
             } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);  // Modo claro
             }
-            requireActivity().recreate();
+            requireActivity().recreate();  // Recrear la actividad para aplicar el cambio de tema
         });
 
-        // Cambiar la contraseña
+        // Configurar el botón para cambiar la contraseña
         changePasswordButton.setOnClickListener(v -> showChangePasswordDialog());
 
         return rootView;
@@ -63,11 +65,11 @@ public class ProfileFragment extends Fragment {
 
     // Método para mostrar el cuadro de diálogo para cambiar la contraseña
     private void showChangePasswordDialog() {
-        // Crear un cuadro de diálogo
+        // Crear un cuadro de diálogo con un campo de texto para ingresar la nueva contraseña
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Cambiar contraseña");
 
-        // Crear un EditText para ingresar la nueva contraseña
+        // Crear un EditText para la nueva contraseña
         final EditText input = new EditText(getContext());
         input.setHint("Nueva contraseña");
         builder.setView(input);
@@ -77,19 +79,19 @@ public class ProfileFragment extends Fragment {
             String newPassword = input.getText().toString().trim();
 
             if (!newPassword.isEmpty()) {
-                changePassword(newPassword);
+                changePassword(newPassword);  // Llamar al método para cambiar la contraseña
             } else {
                 Toast.makeText(getContext(), "La contraseña no puede estar vacía", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Botón para cancelar el cambio de contraseña
+        // Botón para cancelar la acción
         builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
 
-        builder.show();
+        builder.show();  // Mostrar el cuadro de diálogo
     }
 
-    // Método para cambiar la contraseña
+    // Método para cambiar la contraseña en Firebase
     private void changePassword(String newPassword) {
         FirebaseAuth.getInstance().getCurrentUser().updatePassword(newPassword)
                 .addOnCompleteListener(task -> {

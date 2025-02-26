@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
             // Comprobar si el usuario está autenticado
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 // Usuario autenticado, redirigir a MainActivity
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
             } else {
                 // Usuario no autenticado, redirigir a LoginActivity
