@@ -1,10 +1,10 @@
 package com.example.myvideogames.views;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.myvideogames.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -15,19 +15,27 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Después de 2 segundos, redirigir al usuario a MainActivity o LoginActivity
+        // Esperar 2 segundos antes de redirigir
         new Handler().postDelayed(() -> {
-            // Comprobar si el usuario está autenticado
-            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                // Usuario autenticado, redirigir a MainActivity
+            // Verificar SharedPreferences para saber si ya hay un usuario autenticado
+            SharedPreferences sharedPref = getSharedPreferences("AppConfig", MODE_PRIVATE);
+            String userId = sharedPref.getString("userId", null);
+
+            if (userId != null) {
+                // Usuario almacenado, redirigir a MainActivity
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
             } else {
-                // Usuario no autenticado, redirigir a LoginActivity
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
+                // Si no hay usuario guardado, se comprueba FirebaseAuth como respaldo
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
             }
-            finish(); // Termina SplashActivity para que no regrese
-        }, 2000); // 2 segundos de duración de la Splash Screen
+            finish();
+        }, 2000);
     }
 }

@@ -1,12 +1,15 @@
 package com.example.myvideogames.viewmodels;
 
+import android.app.Application;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import com.example.myvideogames.models.Game;
 import com.example.myvideogames.repositories.DashboardRepository;
+import com.example.myvideogames.utils.FavoritesManager;
+import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardViewModel extends ViewModel {
+public class DashboardViewModel extends AndroidViewModel {
 
     // Instancia del repositorio que se encargará de la carga de los datos
     private DashboardRepository dashboardRepository;
@@ -17,42 +20,53 @@ public class DashboardViewModel extends ViewModel {
     // LiveData para almacenar los errores que se observan desde la UI
     private MutableLiveData<Exception> errorLiveData;
 
+    // Gestor de favoritos para filtrar los juegos
+    private FavoritesManager favoritesManager;
+
     // Constructor del ViewModel
-    public DashboardViewModel() {
+    public DashboardViewModel(Application application) {
+        super(application);
         // Inicialización del repositorio que maneja la carga de datos
         dashboardRepository = new DashboardRepository();
 
         // Inicialización de los LiveData
         gamesLiveData = new MutableLiveData<>();
         errorLiveData = new MutableLiveData<>();
+
+        // Inicialización del FavoritesManager
+        favoritesManager = new FavoritesManager(application);
     }
 
-    // Método para cargar los juegos desde el repositorio
+    // Método para cargar los juegos desde el repositorio, filtrando los que están en favoritos
     public void loadGames() {
-        // Llamada al repositorio para cargar los juegos
         dashboardRepository.loadGames(new DashboardRepository.OnDataLoadedListener() {
-            // Callback cuando los datos son cargados con éxito
             @Override
-            public void onDataLoaded(List<Game> games) {
-                // Se actualiza el LiveData con la lista de juegos
-                gamesLiveData.setValue(games);
+            public void onDataLoaded(List<Game> allGames) {
+                // Obtener la lista de juegos favoritos
+                List<Game> favoriteGames = favoritesManager.getFavorites();
+                // Filtrar juegos que NO están en favoritos
+                List<Game> filteredGames = new ArrayList<>();
+                for (Game game : allGames) {
+                    if (!favoriteGames.contains(game)) {
+                        filteredGames.add(game);
+                    }
+                }
+                gamesLiveData.setValue(filteredGames);
             }
 
-            // Callback cuando ocurre un error en la carga de los datos
             @Override
             public void onDataFailed(Exception e) {
-                // Se actualiza el LiveData con el error ocurrido
                 errorLiveData.setValue(e);
             }
         });
     }
 
-    // Método para obtener el LiveData que contiene la lista de juegos
+    // Método para obtener el LiveData de juegos
     public MutableLiveData<List<Game>> getGamesLiveData() {
         return gamesLiveData;
     }
 
-    // Método para obtener el LiveData que contiene el error (si existe)
+    // Método para obtener el LiveData de errores
     public MutableLiveData<Exception> getErrorLiveData() {
         return errorLiveData;
     }

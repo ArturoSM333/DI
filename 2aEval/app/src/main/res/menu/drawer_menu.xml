@@ -12,6 +12,10 @@
         android:title="Perfil"
         android:icon="@drawable/ic_launcher_background" />
     <item
+        android:id="@+id/clear_favorites"
+        android:title="Limpiar Favoritos"
+        android:icon="@drawable/ic_launcher_background" />
+    <item
         android:id="@+id/logout"
         android:title="Cerrar sesión"
         android:icon="@drawable/ic_launcher_background" />
